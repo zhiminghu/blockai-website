@@ -22,11 +22,11 @@
             background: linear-gradient(180deg, #0a0a1a 0%, #1a0f2e 50%, #0f172a 100%);
             color: var(--pixel-white);
             line-height: 1.8;
+            overflow-x: hidden;
         }
         
         .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 3px);
             pointer-events: none; z-index: 9999;
         }
@@ -38,23 +38,42 @@
         
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
+        /* 导航栏 */
         nav {
             position: sticky; top: 0; z-index: 1000;
             background: linear-gradient(180deg, rgba(139, 92, 246, 0.9) 0%, rgba(10, 10, 26, 0.95) 100%);
             padding: 0; margin-bottom: 40px;
             border-bottom: 4px solid var(--pixel-white);
             box-shadow: 0 4px 0 var(--pixel-purple);
+            width: 100%;
         }
         
-        .nav-content { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; max-width: 1200px; margin: 0 auto; }
+        .nav-content {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; max-width: 1200px; margin: 0 auto;
+        }
         
         .logo { font-size: 1.5em; color: var(--pixel-cyan); text-shadow: 3px 3px 0 var(--pixel-purple); }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: var(--pixel-cyan);
+            border: 3px solid var(--pixel-white);
+            padding: 10px 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 var(--pixel-purple);
+        }
+        
+        .nav-menu {
+            display: flex; gap: 10px;
+        }
         
         .nav-menu a {
             color: var(--pixel-white); text-decoration: none; padding: 12px 18px; font-size: 0.65em;
             background: linear-gradient(180deg, rgba(139, 92, 246, 0.8) 0%, rgba(139, 92, 246, 0.4) 100%);
-            border: 3px solid var(--pixel-white); box-shadow: 4px 4px 0 var(--pixel-pink); margin-left: 10px;
-            font-weight: 900; letter-spacing: 2px;
+            border: 3px solid var(--pixel-white); box-shadow: 4px 4px 0 var(--pixel-pink);
+            font-weight: 900; letter-spacing: 2px; white-space: nowrap;
         }
         
         .nav-menu a:hover {
@@ -75,25 +94,22 @@
         .project-icon { font-size: 4em; margin-bottom: 20px; animation: iconBounce 1s ease infinite; }
         @keyframes iconBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .project-title { font-size: 2em; color: var(--pixel-cyan); text-shadow: 4px 4px 0 var(--pixel-purple); margin-bottom: 15px; }
-        .project-status {
-            display: inline-block; padding: 8px 20px; background: var(--pixel-green); color: var(--pixel-bg);
-            font-size: 0.7em; border: 3px solid var(--pixel-white); box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
-        }
+        .project-status { display: inline-block; padding: 8px 20px; background: var(--pixel-green); color: var(--pixel-bg); font-size: 0.7em; border: 3px solid var(--pixel-white); box-shadow: 3px 3px 0 rgba(0,0,0,0.3); }
         
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .info-card { background: rgba(139, 92, 246, 0.2); padding: 20px; text-align: center; }
-        .info-label { font-size: 0.7em; color: var(--pixel-pink); margin-bottom: 10px; }
-        .info-value { font-size: 1.5em; color: var(--pixel-yellow); }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .info-card { background: rgba(139, 92, 246, 0.2); padding: 15px; text-align: center; }
+        .info-label { font-size: 0.7em; color: var(--pixel-pink); margin-bottom: 8px; }
+        .info-value { font-size: 1.3em; color: var(--pixel-yellow); }
         
         .section-title { font-size: 1.3em; color: var(--pixel-yellow); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px dashed var(--pixel-purple); }
         
-        .project-desc { background: rgba(6, 182, 212, 0.1); padding: 25px; margin-bottom: 40px; font-size: 0.8em; line-height: 2; }
+        .project-desc { background: rgba(6, 182, 212, 0.1); padding: 20px; margin-bottom: 40px; font-size: 0.8em; line-height: 2; }
         
-        .features-list { background: rgba(16, 185, 129, 0.1); padding: 25px; margin-bottom: 40px; }
+        .features-list { background: rgba(16, 185, 129, 0.1); padding: 20px; margin-bottom: 40px; }
         .features-list ul { list-style: none; font-size: 0.8em; line-height: 2.5; }
         .features-list li:before { content: "✓ "; color: var(--pixel-green); font-weight: bold; }
         
-        .files-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .files-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .file-card {
             background: rgba(251, 191, 36, 0.1); padding: 20px; border: 3px solid var(--pixel-yellow);
             box-shadow: 4px 4px 0 rgba(251, 191, 36, 0.3); transition: all 0.3s; cursor: pointer;
@@ -109,15 +125,20 @@
         }
         .file-btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--pixel-purple); }
         
-        .timeline { background: rgba(139, 92, 246, 0.1); padding: 25px; margin-bottom: 40px; }
-        .timeline-item { display: flex; margin-bottom: 20px; position: relative; }
+        /* 时间线 - 修复溢出 */
+        .timeline { background: rgba(139, 92, 246, 0.1); padding: 20px; margin-bottom: 40px; overflow: hidden; }
+        .timeline-item { display: flex; margin-bottom: 20px; position: relative; gap: 15px; }
         .timeline-item:last-child { margin-bottom: 0; }
         .timeline-marker {
-            width: 40px; height: 40px; background: var(--pixel-cyan); border-radius: 50%;
+            width: 40px; height: 40px; min-width: 40px;
+            background: var(--pixel-cyan); border-radius: 50%;
             display: flex; align-items: center; justify-content: center; font-size: 1.2em;
-            flex-shrink: 0; margin-right: 20px; box-shadow: 3px 3px 0 var(--pixel-purple);
+            box-shadow: 3px 3px 0 var(--pixel-purple); flex-shrink: 0;
         }
-        .timeline-content { flex: 1; padding: 15px; background: rgba(0, 0, 0, 0.2); }
+        .timeline-content {
+            flex: 1; padding: 15px; background: rgba(0, 0, 0, 0.2);
+            min-width: 0; overflow-wrap: break-word; word-wrap: break-word;
+        }
         .timeline-date { font-size: 0.6em; color: var(--pixel-pink); margin-bottom: 8px; }
         .timeline-title { font-size: 0.8em; color: var(--pixel-cyan); margin-bottom: 8px; }
         .timeline-desc { font-size: 0.6em; line-height: 1.8; opacity: 0.8; }
@@ -130,52 +151,72 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center;
         }
-        
         .modal.active { display: flex; }
-        
         .modal-content {
             background: linear-gradient(180deg, #1a0f2e 0%, #0a0a1a 100%);
             border: 4px solid var(--pixel-white);
             box-shadow: 0 0 50px rgba(139, 92, 246, 0.5);
-            max-width: 800px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
+            max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative;
         }
-        
         .modal-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 20px; border-bottom: 3px solid var(--pixel-purple);
             background: rgba(139, 92, 246, 0.2);
         }
-        
         .modal-title { font-size: 1.2em; color: var(--pixel-yellow); }
-        
         .modal-close {
             background: var(--pixel-red); color: var(--pixel-white); border: 3px solid var(--pixel-white);
             padding: 8px 15px; font-size: 0.6em; cursor: pointer; box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
         }
-        
         .modal-close:hover { transform: translate(-2px, -2px); }
-        
         .modal-body { padding: 25px; font-size: 0.75em; line-height: 2; }
-        
         .code-block {
             background: rgba(0, 0, 0, 0.5); padding: 20px; border: 2px solid var(--pixel-purple);
-            font-family: 'Courier New', monospace; font-size: 0.8em; overflow-x: auto;
-            margin: 15px 0;
+            font-family: 'Courier New', monospace; font-size: 0.8em; overflow-x: auto; margin: 15px 0;
+            white-space: pre-wrap; word-wrap: break-word;
         }
         
         .pixel-decoration {
             position: fixed; font-size: 1.5em; animation: floatUp 4s ease-in infinite;
             pointer-events: none; z-index: 0;
         }
-        
         @keyframes floatUp {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
             100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        /* 手机端优化 */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+            
+            .nav-menu {
+                display: none; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(10, 10, 26, 0.98); flex-direction: column;
+                padding: 20px; border-top: 3px solid var(--pixel-white);
+                border-bottom: 3px solid var(--pixel-purple);
+            }
+            .nav-menu.active { display: flex; }
+            .nav-menu a { margin: 10px 0; text-align: center; padding: 15px; background: rgba(139, 92, 246, 0.3); }
+            
+            .project-title { font-size: 1.5em; }
+            .project-icon { font-size: 3em; }
+            .info-grid { grid-template-columns: repeat(2, 1fr); }
+            .info-value { font-size: 1.1em; }
+            .section-title { font-size: 1.1em; }
+            .project-desc { font-size: 0.7em; }
+            .features-list ul { font-size: 0.7em; }
+            .files-grid { grid-template-columns: 1fr; }
+            
+            /* 时间线手机端优化 */
+            .timeline-item { flex-direction: column; gap: 10px; }
+            .timeline-marker { width: 50px; height: 50px; min-width: 50px; margin: 0 auto; }
+            .timeline-content { width: 100%; }
+            .timeline-date, .timeline-title, .timeline-desc { font-size: 0.7em; }
+            
+            .modal-content { width: 95%; }
+            .modal-title { font-size: 1em; }
+            .modal-close { font-size: 0.5em; }
         }
     </style>
 </head>
@@ -185,11 +226,12 @@
     <nav class="pixel-border">
         <div class="nav-content">
             <div class="logo">🎮 BLOCKAI</div>
-            <div class="nav-menu">
-                <a href="index-pixel.html">🏠 首页</a>
-                <a href="index-pixel.html#services">服务</a>
-                <a href="index-pixel.html#cases">案例</a>
-                <a href="index-pixel.html#contact">联系</a>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="nav-menu" id="navMenu">
+                <a href="index-pixel.html" onclick="closeMenu()">🏠 首页</a>
+                <a href="index-pixel.html#services" onclick="closeMenu()">服务</a>
+                <a href="index-pixel.html#cases" onclick="closeMenu()">案例</a>
+                <a href="index-pixel.html#contact" onclick="closeMenu()">联系</a>
             </div>
         </div>
     </nav>
@@ -348,189 +390,57 @@
                 <div class="modal-title" id="modalTitle">文件查看</div>
                 <button class="modal-close" onclick="closeModal()">✕ 关闭</button>
             </div>
-            <div class="modal-body" id="modalBody">
-                内容加载中...
-            </div>
+            <div class="modal-body" id="modalBody">内容加载中...</div>
         </div>
     </div>
     
     <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function closeMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.remove('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('fileModal').classList.remove('active');
+        }
+        
+        document.getElementById('fileModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+        
         const fileContents = {
             contract: {
                 title: '📜 NFTMint.sol - 智能合约',
-                content: `
-<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">合约概览</h3>
-<p>完整的 NFT 铸造合约，支持白名单和公开发售两个阶段。</p>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">核心功能：</h3>
-<div class="code-block">
-✓ ERC721 标准实现<br>
-✓ Merkle Proof 白名单验证<br>
-✓ 两阶段销售系统<br>
-✓ EIP-2981 版税支持（5%）<br>
-✓ 重入保护<br>
-✓ 访问控制<br>
-✓ Gas 优化
-</div>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">代码片段：</h3>
-<div class="code-block">
-// SPDX-License-Identifier: MIT<br>
-pragma solidity ^0.8.20;<br>
-<br>
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";<br>
-import "@openzeppelin/contracts/access/Ownable.sol";<br>
-<br>
-contract NFTMint is ERC721, Ownable {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;uint256 private constant MAX_SUPPLY = 10000;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;uint256 private constant MAX_PER_WALLET = 5;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;function mintWhitelist(uint256 quantity, bytes32[] calldata merkleProof)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;external payable {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 白名单铸造逻辑<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-}
-</div>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">技术规格：</h3>
-<div class="code-block">
-Solidity 版本：0.8.20<br>
-代码行数：305 行<br>
-注释覆盖率：100%<br>
-测试覆盖率：98.5%<br>
-安全审计：通过（95/100）
-</div>
-                `
+                content: '<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">合约概览</h3><p>完整的 NFT 铸造合约，支持白名单和公开发售两个阶段。</p><h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">核心功能：</h3><div class="code-block">✓ ERC721 标准实现<br>✓ Merkle Proof 白名单验证<br>✓ 两阶段销售系统<br>✓ EIP-2981 版税支持（5%）<br>✓ 重入保护<br>✓ 访问控制<br>✓ Gas 优化</div>'
             },
             test: {
                 title: '🧪 测试报告',
-                content: `
-<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">测试概览</h3>
-<p>完整的测试套件，覆盖所有核心功能。</p>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">测试结果：</h3>
-<div class="code-block">
-总测试数：36<br>
-通过：36 ✅<br>
-失败：0<br>
-覆盖率：98.5%
-</div>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">测试用例：</h3>
-<div class="code-block">
-✓ 部署测试<br>
-✓ 白名单铸造测试<br>
-✓ 公开销售测试<br>
-✓ Merkle Proof 验证<br>
-✓ 限额控制测试<br>
-✓ 所有者功能测试<br>
-✓ 提现功能测试<br>
-✓ 版税测试<br>
-✓ Gas 优化测试
-</div>
-                `
+                content: '<h3 style="color: var(--pixel-cyan);">测试结果</h3><div class="code-block">总测试数：36<br>通过：36 ✅<br>覆盖率：98.5%</div>'
             },
             deploy: {
                 title: '🚀 部署脚本',
-                content: `
-<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">部署配置</h3>
-<p>支持测试网和主网的自动化部署脚本。</p>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">支持网络：</h3>
-<div class="code-block">
-✓ Ethereum Sepolia（测试网）<br>
-✓ Ethereum Mainnet（主网）<br>
-✓ 自动合约验证<br>
-✓ 环境变量管理
-</div>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">部署命令：</h3>
-<div class="code-block">
-# 测试网部署<br>
-npm run deploy:testnet<br>
-<br>
-# 主网部署<br>
-npm run deploy:mainnet<br>
-<br>
-# 合约验证<br>
-npx hardhat verify --network mainnet <ADDRESS>
-</div>
-                `
+                content: '<h3 style="color: var(--pixel-cyan);">支持网络</h3><div class="code-block">✓ Ethereum Sepolia<br>✓ Ethereum Mainnet<br>✓ 自动合约验证</div>'
             },
             frontend: {
                 title: '🎨 前端界面',
-                content: `
-<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">前端特性</h3>
-<p>现代化的 Web3 铸造界面。</p>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">功能列表：</h3>
-<div class="code-block">
-✓ 钱包连接（MetaMask）<br>
-✓ 实时铸造状态<br>
-✓ 进度条显示<br>
-✓ 交易反馈<br>
-✓ 响应式设计<br>
-✓ 像素风格 UI
-</div>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">技术栈：</h3>
-<div class="code-block">
-HTML5 + CSS3<br>
-JavaScript (ES6+)<br>
-Ethers.js v6<br>
-响应式布局
-</div>
-                `
+                content: '<h3 style="color: var(--pixel-cyan);">功能列表</h3><div class="code-block">✓ 钱包连接<br>✓ 实时铸造状态<br>✓ 进度条显示<br>✓ 响应式设计</div>'
             },
             docs: {
                 title: '📚 项目文档',
-                content: `
-<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">文档清单</h3>
-<p>完整的项目文档，包含技术和用户指南。</p>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">包含内容：</h3>
-<div class="code-block">
-✓ README.md - 项目说明<br>
-✓ DELIVERY.md - 交付指南<br>
-✓ 部署流程文档<br>
-✓ 用户使用手册<br>
-✓ API 接口文档<br>
-✓ 常见问题解答
-</div>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">文档格式：</h3>
-<div class="code-block">
-Markdown 格式<br>
-PDF 导出版本<br>
-在线查阅支持
-</div>
-                `
+                content: '<h3 style="color: var(--pixel-cyan);">文档清单</h3><div class="code-block">✓ 技术文档<br>✓ 用户手册<br>✓ 部署指南</div>'
             },
             audit: {
-                title: '🔒 安全审计报告',
-                content: `
-<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">安全审计</h3>
-<p>通过多项安全扫描和手动审查。</p>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">审计结果：</h3>
-<div class="code-block">
-Slither 扫描：✅ 通过<br>
-MythX 检查：✅ 通过<br>
-手动审查：✅ 95/100 分<br>
-高危漏洞：0<br>
-中危漏洞：0<br>
-低危建议：2（已修复）
-</div>
-
-<h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">安全措施：</h3>
-<div class="code-block">
-✓ 重入攻击保护<br>
-✓ 溢出/下溢出保护<br>
-✓ 访问控制正确实现<br>
-✓ 支付验证严格<br>
-✓ Gas 限制优化
-</div>
-                `
+                title: '🔒 安全审计',
+                content: '<h3 style="color: var(--pixel-cyan);">审计结果</h3><div class="code-block">Slither: ✅ 通过<br>MythX: ✅ 通过<br>安全评分：95/100</div>'
             }
         };
         
@@ -541,25 +451,6 @@ MythX 检查：✅ 通过<br>
             document.getElementById('fileModal').classList.add('active');
         }
         
-        function closeModal() {
-            document.getElementById('fileModal').classList.remove('active');
-        }
-        
-        // 点击模态框外部关闭
-        document.getElementById('fileModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-        
-        // ESC 键关闭
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-        
-        // 浮动装饰
         const decorations = ['🌟', '✨', '💫', '⭐', '🎵', '💖'];
         function createDecoration() {
             const dec = document.createElement('div');

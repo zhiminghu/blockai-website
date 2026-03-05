@@ -387,15 +387,20 @@
         /* 流程步骤 */
         .process-steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
         }
         
         .step-card {
             text-align: center;
-            padding: 30px 20px;
+            padding: 50px 20px 20px;
             background: rgba(6, 182, 212, 0.1);
             position: relative;
+            overflow: visible;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            min-height: 180px;
+            margin-top: 10px;
         }
         
         .step-number {
@@ -403,46 +408,55 @@
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             background: var(--pixel-cyan);
             color: var(--pixel-bg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2em;
+            font-size: 1.3em;
+            font-weight: bold;
             box-shadow: 4px 4px 0 var(--pixel-purple);
+            border: 3px solid var(--pixel-white);
+            z-index: 100;
         }
         
         .step-number::after {
             content: '';
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border: 3px dashed var(--pixel-pink);
             border-radius: 50%;
             animation: rotate 10s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         
         @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
         
         .step-icon {
             font-size: 2.5em;
-            margin: 15px 0;
+            margin: 10px 0 15px;
         }
         
         .step-title {
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: var(--pixel-cyan);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: bold;
         }
         
         .step-desc {
-            font-size: 0.6em;
+            font-size: 0.65em;
             line-height: 1.8;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         /* 交付物品 */
@@ -662,10 +676,44 @@
             }
         }
         
+        /* 手机端导航优化 */
+        .mobile-menu-btn {
+            display: none;
+            background: var(--pixel-cyan);
+            border: 3px solid var(--pixel-white);
+            padding: 10px 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 var(--pixel-purple);
+        }
+        
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8em; }
-            .nav-menu { display: none; }
             .hero-stats { flex-direction: column; }
+            
+            .mobile-menu-btn { display: block; }
+            
+            .nav-menu {
+                display: none; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(10, 10, 26, 0.98); flex-direction: column;
+                padding: 20px; border-top: 3px solid var(--pixel-white);
+                border-bottom: 3px solid var(--pixel-purple);
+            }
+            .nav-menu.active { display: flex; }
+            .nav-menu a { margin: 10px 0; text-align: center; padding: 15px; background: rgba(139, 92, 246, 0.3); }
+            
+            .section-title { font-size: 1.5em; }
+            .stat-box { min-width: 100%; }
+            .service-card { min-width: 100%; }
+            .step-card { min-width: 100%; padding: 55px 15px 20px; min-height: 210px; margin-top: 15px; }
+            .step-number { width: 60px; height: 60px; font-size: 1.2em; top: -25px; z-index: 100; }
+            .step-number::after { width: 75px; height: 75px; }
+            .step-icon { font-size: 2.2em; margin: 15px 0 12px; }
+            .step-title { font-size: 0.8em; margin-bottom: 10px; }
+            .step-desc { font-size: 0.7em; padding: 0 10px; }
+            .delivery-item { min-width: 100%; }
+            .case-card { min-width: 100%; }
+            .process-steps { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -676,12 +724,13 @@
     <nav class="pixel-border">
         <div class="nav-content">
             <div class="logo">🎮 BLOCKAI</div>
-            <div class="nav-menu">
-                <a href="#services">服务</a>
-                <a href="#process">流程</a>
-                <a href="#delivery">交付</a>
-                <a href="#cases">案例</a>
-                <a href="#contact">联系</a>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="nav-menu" id="navMenu">
+                <a href="#services" onclick="closeMenu()">服务</a>
+                <a href="#process" onclick="closeMenu()">流程</a>
+                <a href="#delivery" onclick="closeMenu()">交付</a>
+                <a href="#cases" onclick="closeMenu()">案例</a>
+                <a href="#contact" onclick="closeMenu()">联系</a>
             </div>
         </div>
     </nav>
@@ -1019,6 +1068,17 @@
             heart.style.animationDuration = (2 + Math.random() * 2) + 's';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 4000);
+        }
+        
+        // 手机端菜单切换
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function closeMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.remove('active');
         }
         
         // 定时创建装饰

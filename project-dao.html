@@ -6,144 +6,461 @@
     <title>DAO 治理系统 - BlockAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        :root { --pixel-bg: #0a0a1a; --pixel-purple: #8b5cf6; --pixel-pink: #ec4899; --pixel-cyan: #06b6d4; --pixel-yellow: #fbbf24; --pixel-green: #10b981; --pixel-white: #ffffff; }
+        :root {
+            --pixel-bg: #0a0a1a;
+            --pixel-purple: #8b5cf6;
+            --pixel-pink: #ec4899;
+            --pixel-cyan: #06b6d4;
+            --pixel-yellow: #fbbf24;
+            --pixel-green: #10b981;
+            --pixel-white: #ffffff;
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(180deg, #0a0a1a 0%, #1a0f2e 50%, #0f172a 100%); color: var(--pixel-white); line-height: 1.8; }
-        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 3px); pointer-events: none; z-index: 9999; }
-        .pixel-border { border: 4px solid var(--pixel-white); box-shadow: inset 4px 4px 0 rgba(0,0,0,0.5), 4px 4px 0 var(--pixel-purple), 8px 8px 0 rgba(139, 92, 246, 0.3); }
+        
+        body {
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a0f2e 50%, #0f172a 100%);
+            color: var(--pixel-white);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 3px);
+            pointer-events: none; z-index: 9999;
+        }
+        
+        .pixel-border {
+            border: 4px solid var(--pixel-white);
+            box-shadow: inset 4px 4px 0 rgba(0,0,0,0.5), 4px 4px 0 var(--pixel-purple), 8px 8px 0 rgba(139, 92, 246, 0.3);
+        }
+        
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        nav { position: sticky; top: 0; z-index: 1000; background: linear-gradient(180deg, rgba(139, 92, 246, 0.9) 0%, rgba(10, 10, 26, 0.95) 100%); padding: 0; margin-bottom: 40px; border-bottom: 4px solid var(--pixel-white); box-shadow: 0 4px 0 var(--pixel-purple); width: 100%; }
-        .nav-content { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; max-width: 1200px; margin: 0 auto; }
+        
+        /* 导航栏 */
+        nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.9) 0%, rgba(10, 10, 26, 0.95) 100%);
+            padding: 0; margin-bottom: 40px;
+            border-bottom: 4px solid var(--pixel-white);
+            box-shadow: 0 4px 0 var(--pixel-purple);
+            width: 100%;
+        }
+        
+        .nav-content {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; max-width: 1200px; margin: 0 auto;
+        }
+        
         .logo { font-size: 1.5em; color: var(--pixel-cyan); text-shadow: 3px 3px 0 var(--pixel-purple); }
-        .nav-menu a { color: var(--pixel-white); text-decoration: none; padding: 12px 18px; font-size: 0.65em; background: linear-gradient(180deg, rgba(139, 92, 246, 0.8) 0%, rgba(139, 92, 246, 0.4) 100%); border: 3px solid var(--pixel-white); box-shadow: 4px 4px 0 var(--pixel-pink); margin-left: 10px; font-weight: 900; letter-spacing: 2px; }
-        .nav-menu a:hover { transform: translate(-2px, -2px); background: linear-gradient(180deg, rgba(236, 72, 153, 0.8) 0%, rgba(236, 72, 153, 0.4) 100%); color: var(--pixel-yellow); }
-        .back-btn { display: inline-block; padding: 12px 25px; background: var(--pixel-purple); color: var(--pixel-white); text-decoration: none; font-size: 0.7em; border: 3px solid var(--pixel-white); box-shadow: 4px 4px 0 var(--pixel-pink); margin-bottom: 30px; transition: all 0.2s; }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: var(--pixel-cyan);
+            border: 3px solid var(--pixel-white);
+            padding: 10px 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 var(--pixel-purple);
+        }
+        
+        .nav-menu {
+            display: flex; gap: 10px;
+        }
+        
+        .nav-menu a {
+            color: var(--pixel-white); text-decoration: none; padding: 12px 18px; font-size: 0.65em;
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.8) 0%, rgba(139, 92, 246, 0.4) 100%);
+            border: 3px solid var(--pixel-white); box-shadow: 4px 4px 0 var(--pixel-pink);
+            font-weight: 900; letter-spacing: 2px; white-space: nowrap;
+        }
+        
+        .nav-menu a:hover {
+            transform: translate(-2px, -2px);
+            background: linear-gradient(180deg, rgba(236, 72, 153, 0.8) 0%, rgba(236, 72, 153, 0.4) 100%);
+            color: var(--pixel-yellow);
+        }
+        
+        .back-btn {
+            display: inline-block; padding: 12px 25px; background: var(--pixel-purple); color: var(--pixel-white);
+            text-decoration: none; font-size: 0.7em; border: 3px solid var(--pixel-white);
+            box-shadow: 4px 4px 0 var(--pixel-pink); margin-bottom: 30px; transition: all 0.2s;
+        }
+        
         .back-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--pixel-pink); }
+        
         .project-header { text-align: center; padding: 40px 20px; margin-bottom: 40px; }
         .project-icon { font-size: 4em; margin-bottom: 20px; animation: iconBounce 1s ease infinite; }
         @keyframes iconBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .project-title { font-size: 2em; color: var(--pixel-cyan); text-shadow: 4px 4px 0 var(--pixel-purple); margin-bottom: 15px; }
         .project-status { display: inline-block; padding: 8px 20px; background: var(--pixel-green); color: var(--pixel-bg); font-size: 0.7em; border: 3px solid var(--pixel-white); box-shadow: 3px 3px 0 rgba(0,0,0,0.3); }
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .info-card { background: rgba(139, 92, 246, 0.2); padding: 20px; text-align: center; }
-        .info-label { font-size: 0.7em; color: var(--pixel-pink); margin-bottom: 10px; }
-        .info-value { font-size: 1.5em; color: var(--pixel-yellow); }
+        
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .info-card { background: rgba(139, 92, 246, 0.2); padding: 15px; text-align: center; }
+        .info-label { font-size: 0.7em; color: var(--pixel-pink); margin-bottom: 8px; }
+        .info-value { font-size: 1.3em; color: var(--pixel-yellow); }
+        
         .section-title { font-size: 1.3em; color: var(--pixel-yellow); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px dashed var(--pixel-purple); }
-        .project-desc { background: rgba(6, 182, 212, 0.1); padding: 25px; margin-bottom: 40px; font-size: 0.8em; line-height: 2; }
-        .features-list { background: rgba(16, 185, 129, 0.1); padding: 25px; margin-bottom: 40px; }
+        
+        .project-desc { background: rgba(6, 182, 212, 0.1); padding: 20px; margin-bottom: 40px; font-size: 0.8em; line-height: 2; }
+        
+        .features-list { background: rgba(16, 185, 129, 0.1); padding: 20px; margin-bottom: 40px; }
         .features-list ul { list-style: none; font-size: 0.8em; line-height: 2.5; }
         .features-list li:before { content: "✓ "; color: var(--pixel-green); font-weight: bold; }
-        .files-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .file-card { background: rgba(251, 191, 36, 0.1); padding: 20px; border: 3px solid var(--pixel-yellow); box-shadow: 4px 4px 0 rgba(251, 191, 36, 0.3); transition: all 0.3s; cursor: pointer; }
+        
+        .files-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .file-card {
+            background: rgba(251, 191, 36, 0.1); padding: 20px; border: 3px solid var(--pixel-yellow);
+            box-shadow: 4px 4px 0 rgba(251, 191, 36, 0.3); transition: all 0.3s; cursor: pointer;
+        }
         .file-card:hover { transform: translateY(-5px); box-shadow: 6px 6px 0 rgba(251, 191, 36, 0.5); }
         .file-icon { font-size: 2.5em; margin-bottom: 15px; }
         .file-name { font-size: 0.9em; color: var(--pixel-yellow); margin-bottom: 10px; }
         .file-desc { font-size: 0.6em; opacity: 0.8; margin-bottom: 15px; line-height: 1.8; }
-        .file-btn { display: inline-block; padding: 10px 20px; background: var(--pixel-cyan); color: var(--pixel-bg); text-decoration: none; font-size: 0.6em; border: 2px solid var(--pixel-white); box-shadow: 3px 3px 0 var(--pixel-purple); transition: all 0.2s; cursor: pointer; }
+        .file-btn {
+            display: inline-block; padding: 10px 20px; background: var(--pixel-cyan); color: var(--pixel-bg);
+            text-decoration: none; font-size: 0.6em; border: 2px solid var(--pixel-white);
+            box-shadow: 3px 3px 0 var(--pixel-purple); transition: all 0.2s; cursor: pointer;
+        }
         .file-btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--pixel-purple); }
-        .timeline { background: rgba(139, 92, 246, 0.1); padding: 25px; margin-bottom: 40px; }
-        .timeline-item { display: flex; margin-bottom: 20px; position: relative; }
+        
+        /* 时间线 - 修复溢出 */
+        .timeline { background: rgba(139, 92, 246, 0.1); padding: 20px; margin-bottom: 40px; overflow: hidden; }
+        .timeline-item { display: flex; margin-bottom: 20px; position: relative; gap: 15px; }
         .timeline-item:last-child { margin-bottom: 0; }
-        .timeline-marker { width: 40px; height: 40px; background: var(--pixel-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2em; flex-shrink: 0; margin-right: 20px; box-shadow: 3px 3px 0 var(--pixel-purple); }
-        .timeline-content { flex: 1; padding: 15px; background: rgba(0, 0, 0, 0.2); }
+        .timeline-marker {
+            width: 40px; height: 40px; min-width: 40px;
+            background: var(--pixel-cyan); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2em;
+            box-shadow: 3px 3px 0 var(--pixel-purple); flex-shrink: 0;
+        }
+        .timeline-content {
+            flex: 1; padding: 15px; background: rgba(0, 0, 0, 0.2);
+            min-width: 0; overflow-wrap: break-word; word-wrap: break-word;
+        }
         .timeline-date { font-size: 0.6em; color: var(--pixel-pink); margin-bottom: 8px; }
         .timeline-title { font-size: 0.8em; color: var(--pixel-cyan); margin-bottom: 8px; }
         .timeline-desc { font-size: 0.6em; line-height: 1.8; opacity: 0.8; }
+        
         footer { padding: 40px 0; border-top: 4px solid var(--pixel-white); text-align: center; margin-top: 60px; }
         .footer-text { font-size: 0.6em; color: var(--pixel-pink); }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; }
+        
+        /* 模态框 */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center;
+        }
         .modal.active { display: flex; }
-        .modal-content { background: linear-gradient(180deg, #1a0f2e 0%, #0a0a1a 100%); border: 4px solid var(--pixel-white); box-shadow: 0 0 50px rgba(139, 92, 246, 0.5); max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 3px solid var(--pixel-purple); background: rgba(139, 92, 246, 0.2); }
+        .modal-content {
+            background: linear-gradient(180deg, #1a0f2e 0%, #0a0a1a 100%);
+            border: 4px solid var(--pixel-white);
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.5);
+            max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; border-bottom: 3px solid var(--pixel-purple);
+            background: rgba(139, 92, 246, 0.2);
+        }
         .modal-title { font-size: 1.2em; color: var(--pixel-yellow); }
-        .modal-close { background: var(--pixel-red); color: var(--pixel-white); border: 3px solid var(--pixel-white); padding: 8px 15px; font-size: 0.6em; cursor: pointer; box-shadow: 3px 3px 0 rgba(0,0,0,0.3); }
+        .modal-close {
+            background: var(--pixel-red); color: var(--pixel-white); border: 3px solid var(--pixel-white);
+            padding: 8px 15px; font-size: 0.6em; cursor: pointer; box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
         .modal-close:hover { transform: translate(-2px, -2px); }
         .modal-body { padding: 25px; font-size: 0.75em; line-height: 2; }
-        .code-block { background: rgba(0, 0, 0, 0.5); padding: 20px; border: 2px solid var(--pixel-purple); font-family: 'Courier New', monospace; font-size: 0.8em; overflow-x: auto; margin: 15px 0; }
-        .pixel-decoration { position: fixed; font-size: 1.5em; animation: floatUp 4s ease-in infinite; pointer-events: none; z-index: 0; }
-        @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+        .code-block {
+            background: rgba(0, 0, 0, 0.5); padding: 20px; border: 2px solid var(--pixel-purple);
+            font-family: 'Courier New', monospace; font-size: 0.8em; overflow-x: auto; margin: 15px 0;
+            white-space: pre-wrap; word-wrap: break-word;
+        }
+        
+        .pixel-decoration {
+            position: fixed; font-size: 1.5em; animation: floatUp 4s ease-in infinite;
+            pointer-events: none; z-index: 0;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        /* 手机端优化 */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+            
+            .nav-menu {
+                display: none; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(10, 10, 26, 0.98); flex-direction: column;
+                padding: 20px; border-top: 3px solid var(--pixel-white);
+                border-bottom: 3px solid var(--pixel-purple);
+            }
+            .nav-menu.active { display: flex; }
+            .nav-menu a { margin: 10px 0; text-align: center; padding: 15px; background: rgba(139, 92, 246, 0.3); }
+            
+            .project-title { font-size: 1.5em; }
+            .project-icon { font-size: 3em; }
+            .info-grid { grid-template-columns: repeat(2, 1fr); }
+            .info-value { font-size: 1.1em; }
+            .section-title { font-size: 1.1em; }
+            .project-desc { font-size: 0.7em; }
+            .features-list ul { font-size: 0.7em; }
+            .files-grid { grid-template-columns: 1fr; }
+            
+            /* 时间线手机端优化 */
+            .timeline-item { flex-direction: column; gap: 10px; }
+            .timeline-marker { width: 50px; height: 50px; min-width: 50px; margin: 0 auto; }
+            .timeline-content { width: 100%; }
+            .timeline-date, .timeline-title, .timeline-desc { font-size: 0.7em; }
+            
+            .modal-content { width: 95%; }
+            .modal-title { font-size: 1em; }
+            .modal-close { font-size: 0.5em; }
+        }
     </style>
 </head>
 <body>
     <div class="scanlines"></div>
+    
     <nav class="pixel-border">
         <div class="nav-content">
             <div class="logo">🎮 BLOCKAI</div>
-            <div class="nav-menu">
-                <a href="index-pixel.html">🏠 首页</a>
-                <a href="index-pixel.html#services">服务</a>
-                <a href="index-pixel.html#cases">案例</a>
-                <a href="index-pixel.html#contact">联系</a>
+            <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+            <div class="nav-menu" id="navMenu">
+                <a href="index-pixel.html" onclick="closeMenu()">🏠 首页</a>
+                <a href="index-pixel.html#services" onclick="closeMenu()">服务</a>
+                <a href="index-pixel.html#cases" onclick="closeMenu()">案例</a>
+                <a href="index-pixel.html#contact" onclick="closeMenu()">联系</a>
             </div>
         </div>
     </nav>
+    
     <div class="container">
         <a href="index-pixel.html#cases" class="back-btn">⬅ 返回案例列表</a>
+        
         <section class="project-header">
             <div class="project-icon">🏛️</div>
             <h1 class="project-title">DAO 治理系统</h1>
             <span class="project-status">✅ 已完成</span>
         </section>
+        
         <div class="info-grid">
-            <div class="info-card pixel-border"><div class="info-label">💰 项目预算</div><div class="info-value">¥65,000</div></div>
-            <div class="info-card pixel-border"><div class="info-label">⏱️ 交付周期</div><div class="info-value">8 天</div></div>
-            <div class="info-card pixel-border"><div class="info-label">⭐ 客户评分</div><div class="info-value">⭐⭐⭐⭐⭐</div></div>
-            <div class="info-card pixel-border"><div class="info-label">🏛️ DAO 类型</div><div class="info-value">治理型</div></div>
+            <div class="info-card pixel-border">
+                <div class="info-label">💰 项目预算</div>
+                <div class="info-value">¥65,000</div>
+            </div>
+            <div class="info-card pixel-border">
+                <div class="info-label">⏱️ 交付周期</div>
+                <div class="info-value">8 天</div>
+            </div>
+            <div class="info-card pixel-border">
+                <div class="info-label">⭐ 客户评分</div>
+                <div class="info-value">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="info-card pixel-border">
+                <div class="info-label">🏛️ DAO 类型</div>
+                <div class="info-value">治理型</div>
+            </div>
         </div>
+        
         <div class="section-title">📋 项目概述</div>
         <div class="project-desc pixel-border">
-            为某 DAO 组织打造的完整治理系统，包含提案创建、投票、计票和执行功能。
-            支持多种投票机制（简单多数、绝对多数、二次投票），集成 Snapshot 链下签名，
-            Gas 费用优化。系统已处理超过 100 个提案，参与投票地址超过 5000 个。
+            为某艺术机构打造的完整 NFT 铸造平台，包含智能合约、前端界面、部署和文档。
+            支持白名单预售和公开发售两个阶段，内置版税机制确保艺术家持续收益。
+            项目采用最新的 Solidity 0.8.20 版本，通过完整的安全审计和测试覆盖。
         </div>
+        
         <div class="section-title">✨ 核心功能</div>
         <div class="features-list pixel-border">
             <ul>
-                <li>提案创建和管理</li>
-                <li>多种投票机制（简单多数/绝对多数/二次投票）</li>
-                <li>自动计票和执行</li>
-                <li>Snapshot 链下签名集成</li>
-                <li>投票委托功能</li>
-                <li>时间锁执行</li>
-                <li>治理面板前端</li>
-                <li>Gas 优化（节省 40%）</li>
+                <li>ERC721 标准 NFT 合约</li>
+                <li>Merkle Proof 白名单验证</li>
+                <li>两阶段销售（白名单 + 公开）</li>
+                <li>EIP-2981 版税支持（5%）</li>
+                <li>Web3 钱包连接</li>
+                <li>实时铸造进度显示</li>
+                <li>响应式设计（手机/平板/电脑）</li>
+                <li>完整测试套件（98.5% 覆盖率）</li>
             </ul>
         </div>
+        
         <div class="section-title">📦 交付文件</div>
         <div class="files-grid">
-            <div class="file-card" onclick="openModal('contract')"><div class="file-icon">📜</div><div class="file-name">Governance.sol</div><div class="file-desc">治理合约源码<br>380 行代码<br>完整注释</div><span class="file-btn">👁️ 查看代码</span></div>
-            <div class="file-card" onclick="openModal('test')"><div class="file-icon">🧪</div><div class="file-name">Test Suite</div><div class="file-desc">完整测试套件<br>38 个测试用例<br>96% 覆盖率</div><span class="file-btn">👁️ 查看报告</span></div>
-            <div class="file-card" onclick="openModal('deploy')"><div class="file-icon">🚀</div><div class="file-name">Deploy Scripts</div><div class="file-desc">部署脚本<br>多网络支持<br>自动验证</div><span class="file-btn">👁️ 查看脚本</span></div>
-            <div class="file-card" onclick="openModal('frontend')"><div class="file-icon">🎨</div><div class="file-name">Governance UI</div><div class="file-desc">治理面板<br>提案列表<br>投票界面</div><span class="file-btn">👁️ 查看界面</span></div>
-            <div class="file-card" onclick="openModal('docs')"><div class="file-icon">📚</div><div class="file-name">Documentation</div><div class="file-desc">技术文档<br>用户手册<br>治理指南</div><span class="file-btn">👁️ 查看文档</span></div>
-            <div class="file-card" onclick="openModal('audit')"><div class="file-icon">🔒</div><div class="file-name">Security Audit</div><div class="file-desc">Slither 报告<br>MythX 扫描<br>安全评分 94/100</div><span class="file-btn">👁️ 查看报告</span></div>
+            <div class="file-card" onclick="openModal('contract')">
+                <div class="file-icon">📜</div>
+                <div class="file-name">NFTMint.sol</div>
+                <div class="file-desc">智能合约源码<br>305 行代码<br>完整 NatSpec 注释</div>
+                <span class="file-btn">👁️ 查看代码</span>
+            </div>
+            
+            <div class="file-card" onclick="openModal('test')">
+                <div class="file-icon">🧪</div>
+                <div class="file-name">Test Suite</div>
+                <div class="file-desc">完整测试套件<br>36 个测试用例<br>98.5% 覆盖率</div>
+                <span class="file-btn">👁️ 查看报告</span>
+            </div>
+            
+            <div class="file-card" onclick="openModal('deploy')">
+                <div class="file-icon">🚀</div>
+                <div class="file-name">Deploy Scripts</div>
+                <div class="file-desc">部署脚本<br>支持测试网/主网<br>自动验证合约</div>
+                <span class="file-btn">👁️ 查看脚本</span>
+            </div>
+            
+            <div class="file-card" onclick="openModal('frontend')">
+                <div class="file-icon">🏛️</div>
+                <div class="file-name">Frontend UI</div>
+                <div class="file-desc">铸造页面<br>Web3 集成<br>响应式设计</div>
+                <span class="file-btn">👁️ 查看界面</span>
+            </div>
+            
+            <div class="file-card" onclick="openModal('docs')">
+                <div class="file-icon">📚</div>
+                <div class="file-name">Documentation</div>
+                <div class="file-desc">技术文档<br>用户手册<br>部署指南</div>
+                <span class="file-btn">👁️ 查看文档</span>
+            </div>
+            
+            <div class="file-card" onclick="openModal('audit')">
+                <div class="file-icon">🔒</div>
+                <div class="file-name">Security Audit</div>
+                <div class="file-desc">Slither 报告<br>MythX 扫描<br>安全评分 95/100</div>
+                <span class="file-btn">👁️ 查看报告</span>
+            </div>
         </div>
+        
         <div class="section-title">📅 项目时间线</div>
         <div class="timeline pixel-border">
-            <div class="timeline-item"><div class="timeline-marker">1</div><div class="timeline-content"><div class="timeline-date">DAY 1-2</div><div class="timeline-title">需求调研</div><div class="timeline-desc">分析 DAO 治理需求，确定投票机制</div></div></div>
-            <div class="timeline-item"><div class="timeline-marker">2</div><div class="timeline-content"><div class="timeline-date">DAY 3-5</div><div class="timeline-title">合约开发</div><div class="timeline-desc">完成 Governance.sol 开发和测试</div></div></div>
-            <div class="timeline-item"><div class="timeline-marker">3</div><div class="timeline-content"><div class="timeline-date">DAY 6</div><div class="timeline-title">安全审计</div><div class="timeline-desc">Slither 和 MythX 扫描通过</div></div></div>
-            <div class="timeline-item"><div class="timeline-marker">4</div><div class="timeline-content"><div class="timeline-date">DAY 7</div><div class="timeline-title">前端集成</div><div class="timeline-desc">治理面板开发和 Snapshot 集成</div></div></div>
-            <div class="timeline-item"><div class="timeline-marker">5</div><div class="timeline-content"><div class="timeline-date">DAY 8</div><div class="timeline-title">主网上线</div><div class="timeline-desc">部署到 Ethereum 主网，项目交付</div></div></div>
+            <div class="timeline-item">
+                <div class="timeline-marker">1</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">DAY 1 - 09:00</div>
+                    <div class="timeline-title">项目启动</div>
+                    <div class="timeline-desc">需求沟通完成，合同签订，项目正式启动</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-marker">2</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">DAY 2 - 14:30</div>
+                    <div class="timeline-title">合约部署（测试网）</div>
+                    <div class="timeline-desc">NFTMint.sol 部署到 Sepolia，所有测试通过（36/36）</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-marker">3</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">DAY 3 - 10:00</div>
+                    <div class="timeline-title">安全审计</div>
+                    <div class="timeline-desc">Slither 扫描通过，MythX 检查通过，手动审查完成</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-marker">4</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">DAY 4 - 11:00</div>
+                    <div class="timeline-title">客户验收</div>
+                    <div class="timeline-desc">前端定制完成，客户测试通过，准备主网部署</div>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-marker">5</div>
+                <div class="timeline-content">
+                    <div class="timeline-date">DAY 4 - 14:15</div>
+                    <div class="timeline-title">主网上线</div>
+                    <div class="timeline-desc">成功部署到 Ethereum 主网，Etherscan 验证通过，项目交付</div>
+                </div>
+            </div>
         </div>
     </div>
-    <footer><p class="footer-text">© 2026 BLOCKAI - AI DRIVEN BLOCKCHAIN DEVELOPMENT<br>PRESS START TO CONTINUE...</p></footer>
-    <div class="modal" id="fileModal"><div class="modal-content pixel-border"><div class="modal-header"><div class="modal-title" id="modalTitle">文件查看</div><button class="modal-close" onclick="closeModal()">✕ 关闭</button></div><div class="modal-body" id="modalBody">内容加载中...</div></div></div>
+    
+    <footer>
+        <p class="footer-text">© 2026 BLOCKAI - AI DRIVEN BLOCKCHAIN DEVELOPMENT<br>PRESS START TO CONTINUE...</p>
+    </footer>
+    
+    <!-- 模态框 -->
+    <div class="modal" id="fileModal">
+        <div class="modal-content pixel-border">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">文件查看</div>
+                <button class="modal-close" onclick="closeModal()">✕ 关闭</button>
+            </div>
+            <div class="modal-body" id="modalBody">内容加载中...</div>
+        </div>
+    </div>
+    
     <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function closeMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.remove('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('fileModal').classList.remove('active');
+        }
+        
+        document.getElementById('fileModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+        
         const fileContents = {
-            contract: { title: '📜 Governance.sol - 治理合约', content: '<h3 style="color: var(--pixel-cyan);">合约概览</h3><p>完整的 DAO 治理协议，支持多种投票机制。</p><h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">核心功能：</h3><div class="code-block">✓ 提案创建<br>✓ 多种投票机制<br>✓ 自动计票<br>✓ 时间锁执行<br>✓ 投票委托<br>✓ Snapshot 集成</div>' },
-            test: { title: '🧪 测试报告', content: '<h3 style="color: var(--pixel-cyan);">测试结果</h3><div class="code-block">总测试数：38<br>通过：38 ✅<br>覆盖率：96%</div>' },
-            deploy: { title: '🚀 部署脚本', content: '<h3 style="color: var(--pixel-cyan);">支持网络</h3><div class="code-block">✓ Ethereum Mainnet<br>✓ Polygon<br>✓ Arbitrum<br>✓ Optimism</div>' },
-            frontend: { title: '🎨 治理面板', content: '<h3 style="color: var(--pixel-cyan);">功能列表</h3><div class="code-block">✓ 提案列表<br>✓ 创建提案<br>✓ 投票界面<br>✓ 结果展示</div>' },
-            docs: { title: '📚 项目文档', content: '<h3 style="color: var(--pixel-cyan);">文档清单</h3><div class="code-block">✓ 技术文档<br>✓ 用户手册<br>✓ 治理指南</div>' },
-            audit: { title: '🔒 安全审计', content: '<h3 style="color: var(--pixel-cyan);">审计结果</h3><div class="code-block">Slither: ✅ 通过<br>MythX: ✅ 通过<br>安全评分：94/100</div>' }
+            contract: {
+                title: '📜 NFTMint.sol - 智能合约',
+                content: '<h3 style="color: var(--pixel-cyan); margin-bottom: 15px;">合约概览</h3><p>完整的 NFT 铸造合约，支持白名单和公开发售两个阶段。</p><h3 style="color: var(--pixel-yellow); margin: 20px 0 15px;">核心功能：</h3><div class="code-block">✓ ERC721 标准实现<br>✓ Merkle Proof 白名单验证<br>✓ 两阶段销售系统<br>✓ EIP-2981 版税支持（5%）<br>✓ 重入保护<br>✓ 访问控制<br>✓ Gas 优化</div>'
+            },
+            test: {
+                title: '🧪 测试报告',
+                content: '<h3 style="color: var(--pixel-cyan);">测试结果</h3><div class="code-block">总测试数：36<br>通过：36 ✅<br>覆盖率：98.5%</div>'
+            },
+            deploy: {
+                title: '🚀 部署脚本',
+                content: '<h3 style="color: var(--pixel-cyan);">支持网络</h3><div class="code-block">✓ Ethereum Sepolia<br>✓ Ethereum Mainnet<br>✓ 自动合约验证</div>'
+            },
+            frontend: {
+                title: '🏛️ 前端界面',
+                content: '<h3 style="color: var(--pixel-cyan);">功能列表</h3><div class="code-block">✓ 钱包连接<br>✓ 实时铸造状态<br>✓ 进度条显示<br>✓ 响应式设计</div>'
+            },
+            docs: {
+                title: '📚 项目文档',
+                content: '<h3 style="color: var(--pixel-cyan);">文档清单</h3><div class="code-block">✓ 技术文档<br>✓ 用户手册<br>✓ 部署指南</div>'
+            },
+            audit: {
+                title: '🔒 安全审计',
+                content: '<h3 style="color: var(--pixel-cyan);">审计结果</h3><div class="code-block">Slither: ✅ 通过<br>MythX: ✅ 通过<br>安全评分：95/100</div>'
+            }
         };
-        function openModal(fileType) { const file = fileContents[fileType]; document.getElementById('modalTitle').innerHTML = file.title; document.getElementById('modalBody').innerHTML = file.content; document.getElementById('fileModal').classList.add('active'); }
-        function closeModal() { document.getElementById('fileModal').classList.remove('active'); }
-        document.getElementById('fileModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
-        const decorations = ['🌟', '✨', '💫', '⭐', '🏛️', '💖'];
-        function createDecoration() { const dec = document.createElement('div'); dec.className = 'pixel-decoration'; dec.textContent = decorations[Math.floor(Math.random() * decorations.length)]; dec.style.left = Math.random() * 100 + '%'; dec.style.animationDuration = (3 + Math.random() * 3) + 's'; document.body.appendChild(dec); setTimeout(() => dec.remove(), 6000); }
+        
+        function openModal(fileType) {
+            const file = fileContents[fileType];
+            document.getElementById('modalTitle').innerHTML = file.title;
+            document.getElementById('modalBody').innerHTML = file.content;
+            document.getElementById('fileModal').classList.add('active');
+        }
+        
+        const decorations = ['🌟', '✨', '💫', '⭐', '🎵', '💖'];
+        function createDecoration() {
+            const dec = document.createElement('div');
+            dec.className = 'pixel-decoration';
+            dec.textContent = decorations[Math.floor(Math.random() * decorations.length)];
+            dec.style.left = Math.random() * 100 + '%';
+            dec.style.animationDuration = (3 + Math.random() * 3) + 's';
+            document.body.appendChild(dec);
+            setTimeout(() => dec.remove(), 6000);
+        }
         setInterval(createDecoration, 1000);
     </script>
 </body>
