@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeFi 质押协议 - BlockAI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 40px; }
+        .logo { font-size: 1.8em; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; }
+        .nav-links a:hover { color: #fff; }
+        .back-btn { display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 10px; margin-bottom: 30px; transition: all 0.3s; }
+        .back-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .project-header { text-align: center; padding: 60px 20px; margin-bottom: 60px; }
+        .project-icon { font-size: 5em; margin-bottom: 20px; }
+        .project-title { font-size: 2.5em; margin-bottom: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .project-status { display: inline-block; padding: 8px 20px; background: rgba(76,175,80,0.2); color: #4CAF50; border-radius: 20px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 60px; }
+        .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .info-label { font-size: 0.9em; color: rgba(255,255,255,0.6); margin-bottom: 10px; }
+        .info-value { font-size: 1.8em; font-weight: bold; color: #fbbf24; }
+        .section { margin: 60px 0; }
+        .section-title { font-size: 1.8em; margin-bottom: 30px; color: #667eea; }
+        .content-box { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); line-height: 1.8; color: rgba(255,255,255,0.8); }
+        .features-list { list-style: none; }
+        .features-list li { padding: 10px 0; padding-left: 30px; position: relative; }
+        .features-list li:before { content: "✓"; color: #4CAF50; position: absolute; left: 0; font-weight: bold; }
+        .files-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 40px 0; }
+        .file-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; cursor: pointer; }
+        .file-card:hover { transform: translateY(-5px); border-color: rgba(102,126,234,0.5); background: rgba(255,255,255,0.08); }
+        .file-icon { font-size: 3em; margin-bottom: 15px; }
+        .file-name { font-size: 1.1em; color: #667eea; margin-bottom: 10px; }
+        .file-desc { color: rgba(255,255,255,0.6); font-size: 0.9em; line-height: 1.8; margin-bottom: 15px; }
+        .file-btn { display: inline-block; padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; text-decoration: none; border-radius: 8px; font-size: 0.9em; transition: all 0.3s; }
+        .file-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.3); }
+        .timeline { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; }
+        .timeline-item { display: flex; margin-bottom: 25px; gap: 20px; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-marker { width: 50px; height: 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .timeline-content { flex: 1; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .timeline-date { font-size: 0.85em; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+        .timeline-title { font-size: 1.1em; color: #667eea; margin-bottom: 8px; }
+        .timeline-desc { color: rgba(255,255,255,0.7); font-size: 0.9em; line-height: 1.6; }
+        footer { margin-top: 80px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: rgba(255,255,255,0.6); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .modal-title { font-size: 1.3em; color: #667eea; }
+        .modal-close { background: rgba(239,68,68,0.2); color: #ef4444; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em; }
+        .modal-body { padding: 30px; color: rgba(255,255,255,0.8); line-height: 1.8; }
+        .code-block { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.9em; overflow-x: auto; margin: 15px 0; }
+        @media (max-width: 768px) { .project-title { font-size: 1.8em; } .info-grid { grid-template-columns: repeat(2, 1fr); } .timeline-item { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">💼 BlockAI</div>
+            <div class="nav-links">
+                <a href="index-classic.html">首页</a>
+                <a href="index-classic.html#services">服务</a>
+                <a href="index-classic.html#cases">案例</a>
+                <a href="index-classic.html#contact">联系</a>
+            </div>
+        </nav>
+        
+        <a href="index-classic.html#cases" class="back-btn">← 返回案例列表</a>
+        
+        <section class="project-header">
+            <div class="project-icon">💎</div>
+            <h1 class="project-title">DeFi 质押协议</h1>
+            <span class="project-status">✅ 已完成</span>
+        </section>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-label">项目预算</div>
+                <div class="info-value">¥150,000</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">交付周期</div>
+                <div class="info-value">12 天</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">客户评分</div>
+                <div class="info-value">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">NFT 数量</div>
+                <div class="info-value">APY 配置</div>
+            </div>
+        </div>
+        
+        <section class="section">
+            <h2 class="section-title">📋 项目概述</h2>
+            <div class="content-box">
+                <p>为某艺术机构打造的完整 NFT 铸造平台，包含智能合约、前端界面、部署和文档。支持白名单预售和公开发售两个阶段，内置版税机制确保艺术家持续收益。项目采用最新的 Solidity 0.8.20 版本，通过完整的安全审计和测试覆盖。</p>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">✨ 核心功能</h2>
+            <div class="content-box">
+                <ul class="features-list">
+                    <li>ERC721 标准 NFT 合约</li>
+                    <li>Merkle Proof 白名单验证</li>
+                    <li>两阶段销售（白名单 + 公开）</li>
+                    <li>EIP-2981 版税支持（5%）</li>
+                    <li>Web3 钱包连接</li>
+                    <li>实时铸造进度显示</li>
+                    <li>响应式设计（手机/平板/电脑）</li>
+                    <li>完整测试套件（98.5% 覆盖率）</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">📦 交付文件</h2>
+            <div class="files-grid">
+                <div class="file-card" onclick="openModal('contract')">
+                    <div class="file-icon">📜</div>
+                    <div class="file-name">NFTMint.sol</div>
+                    <div class="file-desc">智能合约源码，305 行代码，完整 NatSpec 注释</div>
+                    <span class="file-btn">👁️ 查看代码</span>
+                </div>
+                <div class="file-card" onclick="openModal('test')">
+                    <div class="file-icon">🧪</div>
+                    <div class="file-name">Test Suite</div>
+                    <div class="file-desc">完整测试套件，36 个测试用例，98.5% 覆盖率</div>
+                    <span class="file-btn">👁️ 查看报告</span>
+                </div>
+                <div class="file-card" onclick="openModal('deploy')">
+                    <div class="file-icon">🚀</div>
+                    <div class="file-name">Deploy Scripts</div>
+                    <div class="file-desc">部署脚本，支持测试网/主网，自动验证合约</div>
+                    <span class="file-btn">👁️ 查看脚本</span>
+                </div>
+                <div class="file-card" onclick="openModal('frontend')">
+                    <div class="file-icon">💎</div>
+                    <div class="file-name">Frontend UI</div>
+                    <div class="file-desc">铸造页面，Web3 集成，响应式设计</div>
+                    <span class="file-btn">👁️ 查看界面</span>
+                </div>
+                <div class="file-card" onclick="openModal('docs')">
+                    <div class="file-icon">📚</div>
+                    <div class="file-name">Documentation</div>
+                    <div class="file-desc">技术文档，用户手册，部署指南</div>
+                    <span class="file-btn">👁️ 查看文档</span>
+                </div>
+                <div class="file-card" onclick="openModal('audit')">
+                    <div class="file-icon">🔒</div>
+                    <div class="file-name">Security Audit</div>
+                    <div class="file-desc">Slither 报告，MythX 扫描，安全评分 95/100</div>
+                    <span class="file-btn">👁️ 查看报告</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">📅 项目时间线</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">DAY 1 - 09:00</div>
+                        <div class="timeline-title">项目启动</div>
+                        <div class="timeline-desc">需求沟通完成，合同签订，项目正式启动</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">DAY 2 - 14:30</div>
+                        <div class="timeline-title">合约部署（测试网）</div>
+                        <div class="timeline-desc">NFTMint.sol 部署到 Sepolia，所有测试通过（36/36）</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">DAY 3 - 10:00</div>
+                        <div class="timeline-title">安全审计</div>
+                        <div class="timeline-desc">Slither 扫描通过，MythX 检查通过，手动审查完成</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">DAY 4 - 11:00</div>
+                        <div class="timeline-title">客户验收</div>
+                        <div class="timeline-desc">前端定制完成，客户测试通过，准备主网部署</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">5</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">DAY 4 - 14:15</div>
+                        <div class="timeline-title">主网上线</div>
+                        <div class="timeline-desc">成功部署到 Ethereum 主网，Etherscan 验证通过，项目交付</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2026 BlockAI - Professional Blockchain Development</p>
+    </footer>
+    
+    <div class="modal" id="fileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">文件查看</div>
+                <button class="modal-close" onclick="closeModal()">关闭</button>
+            </div>
+            <div class="modal-body" id="modalBody">内容加载中...</div>
+        </div>
+    </div>
+    
+    <script>
+        const fileContents = {
+            contract: { title: '📜 NFTMint.sol', content: '<h3>合约概览</h3><p>完整的 NFT 铸造合约，支持白名单和公开发售两个阶段。</p><div class="code-block">✓ ERC721 标准实现<br>✓ Merkle Proof 白名单验证<br>✓ 两阶段销售系统<br>✓ EIP-2981 版税支持（5%）<br>✓ 重入保护<br>✓ 访问控制<br>✓ Gas 优化</div>' },
+            test: { title: '🧪 测试报告', content: '<h3>测试结果</h3><div class="code-block">总测试数：36<br>通过：36 ✅<br>覆盖率：98.5%</div>' },
+            deploy: { title: '🚀 部署脚本', content: '<h3>支持网络</h3><div class="code-block">✓ Ethereum Sepolia<br>✓ Ethereum Mainnet<br>✓ 自动合约验证</div>' },
+            frontend: { title: '💎 前端界面', content: '<h3>功能列表</h3><div class="code-block">✓ 钱包连接<br>✓ 实时铸造状态<br>✓ 进度条显示<br>✓ 响应式设计</div>' },
+            docs: { title: '📚 项目文档', content: '<h3>文档清单</h3><div class="code-block">✓ 技术文档<br>✓ 用户手册<br>✓ 部署指南</div>' },
+            audit: { title: '🔒 安全审计', content: '<h3>审计结果</h3><div class="code-block">Slither: ✅ 通过<br>MythX: ✅ 通过<br>安全评分：95/100</div>' }
+        };
+        function openModal(type) { document.getElementById('modalTitle').textContent = fileContents[type].title; document.getElementById('modalBody').innerHTML = fileContents[type].content; document.getElementById('fileModal').classList.add('active'); }
+        function closeModal() { document.getElementById('fileModal').classList.remove('active'); }
+        document.getElementById('fileModal').addEventListener('click', e => { if(e.target.id === 'fileModal') closeModal(); });
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+</html>
